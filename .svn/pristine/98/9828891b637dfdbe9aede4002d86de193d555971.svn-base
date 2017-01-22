@@ -1,0 +1,68 @@
+#include <SDL.h>
+#include <SDL_gfxPrimitives.h>
+#include <math.h>
+#include <stdlib.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include "main.h"
+
+static SDL_Surface *background;
+static SDL_Color black = {0,0,0};
+static TTF_Font *font;
+SDL_Surface *text;
+
+void ranking_loop(SDL_Surface *screen, int *ranking){
+    SDL_Event event;
+    drawranking(screen);
+    if(SDL_PollEvent(&event)){
+        switch(event.type){
+            case SDL_KEYDOWN: {
+                switch(event.key.keysym.sym){
+                    case SDLK_q:{
+                        *ranking = 0;
+                        break;
+                    }
+                    default: break;
+                }
+            }
+        }
+    }
+}
+
+void fontinit_r(){
+    /*Betûtipus betöltése*/
+    TTF_Init();
+    font = TTF_OpenFont("cour.ttf", 25);
+    if (!font) {
+        fprintf(stderr, "Nem sikerult betölteni a betutipust! %s\n", TTF_GetError());
+        exit(2);
+    }
+}
+
+void drawranking(SDL_Surface *screen){
+    //Háttér kirajzolása
+    SDL_BlitSurface(background, NULL, screen, NULL);
+
+    text = TTF_RenderUTF8_Blended(font, "Hopp\xC3\xA1, itt nincs semmi! :(", black);
+    SDL_Rect dest = {50,80,0,0};
+    SDL_BlitSurface(text, NULL, screen, &dest);
+    SDL_FreeSurface(text);
+
+    SDL_Flip(screen);
+}
+
+void loadranking(){
+    background = IMG_Load("pic/ranking_bg.png");
+
+    if(background == NULL){
+        fprintf(stderr, "Nem sikerült betölteni a rangsorhoz a képeket!\n");
+        exit(3);
+    }
+
+    /*Fájl betöltése*/
+
+}
+
+void freeranking(){
+    SDL_FreeSurface(background);
+}

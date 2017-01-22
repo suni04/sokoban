@@ -1,0 +1,20 @@
+#ifndef GAME_H_INCLUDED
+#define GAME_H_INCLUDED
+
+typedef struct {
+    int x, y;
+} koor;
+
+typedef struct {
+    int level_w, level_h;
+    char *map;
+} lab;
+
+void fontinit();
+void loadimages();
+void loadponystates();
+void loadlevel(koor **boxpos, koor *charpos, lab *lab);
+void game_event_loop (SDL_Surface *screen, koor *charpos, koor *boxpos, lab *lab, int *game, int *level);
+void freegame();
+
+#endif // GAME_H_INCLUDED

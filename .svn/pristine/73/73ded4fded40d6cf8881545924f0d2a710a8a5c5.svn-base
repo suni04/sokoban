@@ -1,0 +1,116 @@
+#include <SDL.h>
+#include <SDL_gfxPrimitives.h>
+#include <math.h>
+#include <stdlib.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include "main.h"
+#include "ranking.h"
+
+static SDL_Surface *background;
+static SDL_Color black = {0,0,0};
+static TTF_Font *font;
+SDL_Surface *text;
+
+void ranking_loop(SDL_Surface *screen, int *ranking){
+    SDL_Event event;
+    drawranking(screen);
+    if(SDL_PollEvent(&event)){
+        switch(event.type){
+            case SDL_KEYDOWN: {
+                switch(event.key.keysym.sym){
+                    case SDLK_q:{
+                        *ranking = 0;
+                        break;
+                    }
+                    default: break;
+                }
+            }
+        }
+    }
+}
+
+void fontinit_r(){
+    /*Betûtipus betöltése*/
+    TTF_Init();
+    font = TTF_OpenFont("cour.ttf", 25);
+    if (!font) {
+        fprintf(stderr, "Nem sikerult betölteni a betutipust! %s\n", TTF_GetError());
+        exit(2);
+    }
+}
+
+void drawranking(SDL_Surface *screen){
+    //Háttér kirajzolása
+    SDL_BlitSurface(background, NULL, screen, NULL);
+
+    text = TTF_RenderUTF8_Blended(font, "Hopp\xC3\xA1, itt nincs semmi! :(", black);
+    SDL_Rect dest = {50,80,0,0};
+    SDL_BlitSurface(text, NULL, screen, &dest);
+    SDL_FreeSurface(text);
+
+    SDL_Flip(screen);
+}
+
+void loadranking(scoreboard *sb){
+    background = IMG_Load("pic/ranking_bg.png");
+
+    if(background == NULL){
+        fprintf(stderr, "Nem sikerült betölteni a rangsorhoz a képeket!\n");
+        exit(3);
+    }
+
+    /*Fájl betöltése*/
+    FILE *f;
+    int i,j;
+    f = fopen("ranking/ranking.txt", "rt");
+    if(f == NULL){
+        for (i = 0; i < 5; i++)
+            sb[i].numofscore = 0;
+    }
+    else{
+        for (i = 0; i < 5; i++){
+            fscanf(f, "%d", &sb[i].numofscore);
+            sb[i].scores = (int *) malloc(sb[i].numofscore*sizeof(int));
+            for(j = 0; j < sb[i].numofscore; j++){
+                fscanf(f, "%d", &sb[i].scores[j]);
+            }
+        }
+        fclose(f);
+    }
+}
+
+void saveranking(scoreboard *sb, int result, int level){
+    FILE *f;
+    int i, j;
+    for(i = 0; i < sb[level].numofscore && result >= sb[level].scores[i]; i++){
+        //megkeresi az új eredmény helyét
+    }
+    if(i < 3){
+        if(sb[level].numofscore < 3)
+            sb[level].numofscore++;
+        //az eredményt beszúrjuk az i-edik helyre, a többi elem hátraléptetésével
+        for(j = sb[level].numofscore-1; j > i; j--){
+            sb[level].scores[j] = sb[level].scores[j-1];
+        }
+        sb[level].scores[i] = result;
+
+        /*Új rangsor fájlbaírása*/
+        f = fopen("ranking/ranking.txt", "wt");
+        if(f == NULL)
+            fprintf(stderr, "Nem sikerult létrehozni a ranking.txt-t");
+        else{
+            for(i = 0; i < 5; i++){
+                fprintf(f, "%d", sb[i].numofscore);
+                for(j = 0; j < sb[i].numofscore; j++)
+                    fprintf(f, " %d", sb[i].scores[j]);
+                fprintf(f, "\n");
+            }
+            fclose(f);
+        }
+    }
+}
+
+void freeranking(){
+    SDL_FreeSurface(background);
+}

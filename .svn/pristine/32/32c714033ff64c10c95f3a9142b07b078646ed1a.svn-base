@@ -1,9 +1,0 @@
-#ifndef RANKING_H_INCLUDED
-#define RANKING_H_INCLUDED
-
-void ranking_loop(SDL_Surface *screen, int *ranking);
-void fontinit_r();
-void drawranking(SDL_Surface *screen);
-freeranking();
-
-#endif // RANKING_H_INCLUDED

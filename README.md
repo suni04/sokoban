@@ -2,7 +2,7 @@
 
 This is my homework project for my Programming 1 class. It's a simple sokoban game with Fluttershy the pony. For the graphics I used SDL.
 
-Controls:
+Controls:  <br/>
 -move: arrow keys <br/>
 -reset level: R <br/>
 -quit: Q <br/>

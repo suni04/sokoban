@@ -8,5 +8,5 @@ Controls:  <br/>
 -quit: Q <br/>
 
 ![alt tag](http://i1109.photobucket.com/albums/h424/vajnatimi/1_1.png?t=1497129559)
-![alt tag](http://vajnatimea.hu/img/sokoban-level1.PNG)
-![alt tag](http://vajnatimea.hu/img/sokoban-level3.PNG)
+![alt tag](http://i1109.photobucket.com/albums/h424/vajnatimi/2.png)
+![alt tag](http://i1109.photobucket.com/albums/h424/vajnatimi/3.png?t=1497129562)
